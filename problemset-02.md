@@ -1,6 +1,6 @@
 # CMPS 6610 Problem Set 02
 
-**Name:**_________________________
+**Name:** Md. Ahsan habib
 
 In this assignment we'll work on applying the methods we've learned to
 analyze recurrences, and also see their behavior in practice. As with
@@ -12,11 +12,8 @@ to a file named `answers.pdf`.
 
 1. Prove that $\log n! \in \Theta(n \log n).$
 
-.  
-.  
-.  
-.  
-.  
+  - *Answer:*
+    - To prove $\log n! \in \Theta(n \log n)$, we need to find $c_1 > 0$, $c_2 > 0$ and a number $n_0$ such that $c_1 \cdot n \log n \le \log n! \le c_2 \cdot n \log n$ for all $n \ge n_0$. 
  
  
 2. Derive asymptotic upper bounds for each recurrence below, using a
