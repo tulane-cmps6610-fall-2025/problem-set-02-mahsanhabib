@@ -460,7 +460,7 @@ $B$ then there are several possible outcomes:
     - Let the student set is $S = \{s_1, s_2, s_3, s_4, s_5\}$ with $n=5$. Black hat and white hat sets are $S_b = \{s_1, s_5\}$ and $S_w = \{s_2, s_3, s_4\}$, respectively. Here, $|S_b| < n/2$ and $|S_w| > n/2$. 
 
 
-    - Lets do pairwise tests to try to determine a white hat student (let's say $s_3$). Here is how the pairwise tests could go, assuming the black hats conspire:
+    - Lets do pairwise tests to try to determine a white hat student (let's say $s_3$). In such case, we have to include all the students to do pariwise test. Here is how the pairwise tests could go:
 
       - Test $s_3$ (white hat) vs $s_1$ (black hat):
         - $s_3$ says $s_1$ is a black hat (truthful)
@@ -472,11 +472,33 @@ $B$ then there are several possible outcomes:
         - $s_4$ says $s_2$ is a white hat
         - Outcome: Both say the other is a white hat → "both are good, or both are bad"
 
-    - Here we can safely remove the $s_3$ and $s_1$ pair, because both accuse each other (at least one is bad). As majority is white hats, we can keep one of $s_2$ and $s_4$. Lets keep $s_2$ from here. Lets carry $s_5$. But then the set size of the next round will be $<n/2$. That's why we can keep both $s_2$ and $s_4$. Hence final set for next round : $S_{next} = \{ s_2, s_4, s_5 \}$. Here also the majority white hat persist. 
+      - Test $s_5$ vs $s_4$ (white hat):
+        - $s_5$ says $s_4$ is a black hat
+        - $s_4$ says $s_5$ is a black hat
+        - Outcome: Both say the other is a black hat → "at least one is bad"
 
-    - This means that after each round, the number of candidates is reduced by a constant fraction (specifically, at most half remain), which is why the process is efficient and completes in $O(\log n)$ rounds. .
+    - Here we can remove either ($s_5$ and $s_4$) or ($s_3$ and $s_1$) pair for the next round, because both accuse each other (at least one is bad). Lets remove ($s_5$ and $s_4$), then we have $(s_1, s_2, s_3)$ left (white hat majority). If we removed ($s_3$ and $s_1$), we also have the white majority $(s_2, s_4, s_5)$. 
+
+    - This means that after each round, the number of candidates is reduced by a constant fraction (specifically, half remain), which is why the process is efficient and completes in $O(\log_2 n)$ rounds.
 
 
 
 *6c.* Using the above show that all white hats can be identified using $\Theta(n)$ pairwise interviews.
+
+
+*Answer:*
+  - To determine a white hat:
+    - First round: $n/2$ interviews
+    - Second round: $n/4$ interviews
+    - Third round: $n/8$ interviews
+    - ...
+    - Last round: at most $1$ interview
+  - The total number of interviews is the sum of a geometric series:
+    $$
+    \frac{n}{2} + \frac{n}{4} + \frac{n}{8} + \cdots < n
+    $$
+    So, the elimination phase requires $O(n)$ interviews in total.
+  - After finding one white hat, we can ask that student about every other student in $n-1$ interviews, since white hats always tell the truth.
+  - Therefore, the total number of pairwise interviews is $O(n)$ $+$ $O(n)$. This process always require at most $O(n)$ times, even in the worst case scenario.
+  - Thus, the total number of interviews required is $\Theta(n)$.
 
