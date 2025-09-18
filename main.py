@@ -46,31 +46,36 @@ def pad(x,y):
     
 def quadratic_multiply(x, y):
     ### TODO
+    if len(x.binary_vec) == 1 and len(y.binary_vec) == 1:
+        return BinaryNumber(x.decimal_val * y.decimal_val)
+
     # Pad both x and y to the same even length
     xvec, yvec = pad(x.binary_vec, y.binary_vec)
     n = len(xvec)
     # Now split
-    xl, xr = split_number(x.binary_vec)
-    yl, yr = split_number(x.binary_vec)
+    xl, xr = split_number(xvec)
+    yl, yr = split_number(yvec)
+
+    # Recursive calls
+    p1 = quadratic_multiply(xl, yl)
+    p2 = quadratic_multiply(xl, yr)
+    p3 = quadratic_multiply(xr, yl)
+    p4 = quadratic_multiply(xr, yr)
 
     # Compute the three products
-    first = bit_shift(BinaryNumber(xl.decimal_val * yl.decimal_val), n)
-    second = bit_shift(BinaryNumber(xl.decimal_val * yr.decimal_val + xr.decimal_val * yl.decimal_val), n//2)
-    third = bit_shift(BinaryNumber(xr.decimal_val * yr.decimal_val), 0)
-    max_len = max(len(first.binary_vec), len(second.binary_vec), len(third.binary_vec))
-    first.binary_vec = ['0'] * (max_len - len(first.binary_vec)) + first.binary_vec
-    second.binary_vec = ['0'] * (max_len - len(second.binary_vec)) + second.binary_vec
-    third.binary_vec = ['0'] * (max_len - len(third.binary_vec)) + third.binary_vec
-    # print(first, second, third)
+    first = bit_shift(p1, n)
+    second = bit_shift(BinaryNumber(p2.decimal_val + p3.decimal_val), n//2)
+    third = bit_shift(p4, 0)
+
     # Add the three binary numbers (as vectors) together
+    # Add results together
     def add_binary_vecs(a, b):
-        # a, b are lists of '0'/'1'
         max_len = max(len(a), len(b))
         a = ['0'] * (max_len - len(a)) + a
         b = ['0'] * (max_len - len(b)) + b
         carry = 0
         result = ['0'] * max_len
-        for i in range(max_len-1, -1, -1):
+        for i in range(max_len - 1, -1, -1):
             total = int(a[i]) + int(b[i]) + carry
             result[i] = str(total % 2)
             carry = total // 2
