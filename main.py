@@ -43,7 +43,22 @@ def pad(x,y):
         x = ['0'] + x
         y = ['0'] + y
     return x,y
-    
+
+# Add results together
+def add_binary_vecs(a, b):
+    max_len = max(len(a), len(b))
+    a = ['0'] * (max_len - len(a)) + a
+    b = ['0'] * (max_len - len(b)) + b
+    carry = 0
+    result = ['0'] * max_len
+    for i in range(max_len - 1, -1, -1):
+        total = int(a[i]) + int(b[i]) + carry
+        result[i] = str(total % 2)
+        carry = total // 2
+    if carry:
+        result = [str(carry)] + result
+    return result
+
 def quadratic_multiply(x, y):
     ### TODO
     if len(x.binary_vec) == 1 and len(y.binary_vec) == 1:
@@ -68,21 +83,6 @@ def quadratic_multiply(x, y):
     third = bit_shift(p4, 0)
 
     # Add the three binary numbers (as vectors) together
-    # Add results together
-    def add_binary_vecs(a, b):
-        max_len = max(len(a), len(b))
-        a = ['0'] * (max_len - len(a)) + a
-        b = ['0'] * (max_len - len(b)) + b
-        carry = 0
-        result = ['0'] * max_len
-        for i in range(max_len - 1, -1, -1):
-            total = int(a[i]) + int(b[i]) + carry
-            result[i] = str(total % 2)
-            carry = total // 2
-        if carry:
-            result = [str(carry)] + result
-        return result
-
     sum1 = add_binary_vecs(first.binary_vec, second.binary_vec)
     total_sum = add_binary_vecs(sum1, third.binary_vec)
     return binary2int(total_sum)
@@ -91,12 +91,39 @@ def quadratic_multiply(x, y):
 
 def subquadratic_multiply(x, y):
     ### TODO
-    pass
+    if len(x.binary_vec) == 1 and len(y.binary_vec) == 1:
+        return BinaryNumber(x.decimal_val * y.decimal_val)
+
+    # Pad both x and y to the same even length
+    xvec, yvec = pad(x.binary_vec, y.binary_vec)
+    n = len(xvec)
+    # Now split
+    xl, xr = split_number(xvec)
+    yl, yr = split_number(yvec)
+
+    # Recursive calls
+    p1 = quadratic_multiply(xl, yl)
+    p2 = quadratic_multiply(xr, yr)
+    p3 = quadratic_multiply((BinaryNumber(xl.decimal_val + xr.decimal_val)), (BinaryNumber(yl.decimal_val + yr.decimal_val)))
+    p3 = BinaryNumber(p3.decimal_val - p1.decimal_val - p2.decimal_val) 
+
+    # Compute the three products
+    first = bit_shift(p1, n)
+    second = bit_shift(p3, n//2)
+    third = bit_shift(p2, 0)
+
+    # Add the three binary numbers (as vectors) together
+    sum1 = add_binary_vecs(first.binary_vec, second.binary_vec)
+    total_sum = add_binary_vecs(sum1, third.binary_vec)
+    return binary2int(total_sum)
     ###
 
 ## Feel free to add your own tests here.
 def test_multiply():
-    assert binary2int(quadratic_multiply(BinaryNumber(2), BinaryNumber(2))) == 2*2
+    assert quadratic_multiply(BinaryNumber(2), BinaryNumber(2)).decimal_val == 2*2
+    assert subquadratic_multiply(BinaryNumber(2), BinaryNumber(2)).decimal_val == 2*2   
+    assert quadratic_multiply(BinaryNumber(3), BinaryNumber(5)).decimal_val == 3*5
+    assert subquadratic_multiply(BinaryNumber(3), BinaryNumber(5)).decimal_val == 3*5
 
 # some timing functions here that will make comparisons easy    
 def time_multiply(x, y, f):
@@ -124,5 +151,7 @@ def print_results(results):
             tablefmt="github"))
     
     
-
-compare_multiply()
+if __name__ == "__main__":
+    # print(quadratic_multiply(BinaryNumber(2), BinaryNumber(2)))
+    test_multiply()
+    compare_multiply()
