@@ -409,38 +409,29 @@ $B$ then there are several possible outcomes:
 - *Answer:*
   - Here, $>n/2$ students are black hats and they always try to conspire. In such case, if we do the pairwise test to determine a white hat student we cannot do so because the dominating outcomes will be from the black hats. 
   - Example: 
-    - Let the student set is $S = \{s_1, s_2, s_3, s_4, s_5\}$ with $n=5$. Black hat and white hat sets are $S_b = \{s_1, s_3, s_5\}$ and $S_w = \{s_2, s_4\}$, respectively. Here, $|S_b| > n/2$ and $|S_w| < n/2$. 
+    - Let the student set is $S = \{s_1, s_2, s_3, s_4, s_5, s_6\}$ with $n=6$. Black hat and white hat sets are $S_b = \{s_1, s_3, s_5, s_6\}$ and $S_w = \{s_2, s_4\}$, respectively. Here, $|S_b| > n/2$ and $|S_w| < n/2$. 
 
 
     - Let's do pairwise tests to try to determine a white hat student (let's say $s_4$). Here is how the pairwise tests could go, assuming the black hats conspire:
 
-
-      Let's do pairwise tests to try to determine a white hat student (let's say $s_3$) and see how the elimination process works:
-
-      - Pair up the students: $(s_1, s_2), (s_3, s_4)$. $s_5$ is left unpaired (since $n$ is odd, we can ignore $s_5$ for this round or carry them to the next round).
+      - Pair up the students: $(s_1, s_2), (s_3, s_4)$ and $(s_5, s_6)$.
 
       - Test $s_1$ (black hat) vs $s_2$ (white hat):
         - $s_1$ can say anything (black hat), suppose $s_1$ says $s_2$ is a black hat
         - $s_2$ says $s_1$ is a black hat (truthful)
-        - At least one says the other is a black hat → Discard both $s_1$ and $s_2$
+        - At least one says the other is a black hat
 
-      - Test $s_3$ (white hat) vs $s_4$ (white hat):
-        - $s_3$ says $s_4$ is a white hat (truthful)
-        - $s_4$ says $s_3$ is a white hat (truthful)
-        - Both say the other is a white hat → Keep one (say, keep $s_3$)
+      - Test $s_3$ (black hat) vs $s_4$ (white hat):
+        - $s_3$ says $s_4$ is a black hat
+        - $s_4$ says $s_3$ is a black hat (truthful)
+        - At least one says the other is a black hat
 
-      - $s_5$ (black hat) is left unpaired, so carry $s_5$ to the next round.
+      - Test $s_5$ (black hat) vs $s_6$ (black hat):
+        - $s_5$ can say anything (black hat), suppose $s_5$ says $s_6$ is a white hat
+        - Similarly, $s_6$ says $s_5$ is a white hat
+        - Both say the other is a white hat
 
-      - After this round, the survivors are $s_3$ (white hat) and $s_5$ (black hat). Now $n=2$.
-
-      - Pair $s_3$ and $s_5$:
-        - $s_3$ says $s_5$ is a black hat (truthful)
-        - $s_5$ can say anything, suppose $s_5$ says $s_3$ is a black hat
-        - At least one says the other is a black hat → Discard both
-
-      - Now, no students remain, but if we had started with a larger set, the process would continue recursively, always keeping at least one white hat per all-white-hat pair. Since white hats are the majority, at least one white hat will survive to the end.
-
-      - This shows how the elimination process works: in each round, $n/2$ pairwise tests reduce the problem size by about half, and the majority of white hats is preserved among the survivors.
+      - As $>n/2$ students are black hats, we cannot reduce the set with majority white hats (for sure). From the above example pairs, we cannot pickup any $n/2$ students with majority white hats. 
 
 
 
@@ -449,29 +440,33 @@ $B$ then there are several possible outcomes:
 - *Answer:*
   - Here, $>n/2$ students are white hats and they always tell the truth. In such case, if we do the pairwise test to determine a white hat student we can reduce the problem size by a constant fraction with $n/2$ pairwise interviews. 
   - Example: 
-    - Let the student set is $S = \{s_1, s_2, s_3, s_4, s_5\}$ with $n=5$. Black hat and white hat sets are $S_b = \{s_1, s_5\}$ and $S_w = \{s_2, s_3, s_4\}$, respectively. Here, $|S_b| < n/2$ and $|S_w| > n/2$. 
+    - Let the student set is $S = \{s_1, s_2, s_3, s_4, s_5, s_6\}$ with $n=6$. Black hat and white hat sets are $S_b = \{s_1, s_3\}$ and $S_w = \{s_2, s_4, s_5, s_6\}$, respectively. Here, $|S_b| < n/2$ and $|S_w| > n/2$. 
 
 
-    - Lets do pairwise tests to try to determine a white hat student (let's say $s_3$). In such case, we have to include all the students to do pariwise test. Here is how the pairwise tests could go:
+    - Let's do pairwise tests to try to determine a white hat student (let's say $s_4$). Here is how the pairwise tests could go, assuming the black hats conspire:
 
-      - Test $s_3$ (white hat) vs $s_1$ (black hat):
-        - $s_3$ says $s_1$ is a black hat (truthful)
-        - $s_1$ (black hat) can say anything, but to conspire, $s_1$ says $s_3$ is a black hat
-        - Outcome: Both accuse each other of being black hats → "at least one is bad"
+      - Pair up the students: $(s_1, s_2), (s_3, s_4)$ and $(s_5, s_6)$.
 
-      - Test $s_2$ vs $s_4$ (white hat):
-        - $s_2$ says $s_4$ is a white hat
-        - $s_4$ says $s_2$ is a white hat
-        - Outcome: Both say the other is a white hat → "both are good, or both are bad"
+      - Test $s_1$ (black hat) vs $s_2$ (white hat):
+        - $s_1$ can say anything (black hat), suppose $s_1$ says $s_2$ is a black hat
+        - $s_2$ says $s_1$ is a black hat (truthful)
+        - At least one says the other is a black hat
 
-      - Test $s_5$ vs $s_4$ (white hat):
-        - $s_5$ says $s_4$ is a black hat
-        - $s_4$ says $s_5$ is a black hat
-        - Outcome: Both say the other is a black hat → "at least one is bad"
+      - Test $s_3$ (black hat) vs $s_4$ (white hat):
+        - $s_3$ says $s_4$ is a black hat
+        - $s_4$ says $s_3$ is a black hat (truthful)
+        - At least one says the other is a black hat
 
-    - Here we can remove either ($s_5$ and $s_4$) or ($s_3$ and $s_1$) pair for the next round, because both accuse each other (at least one is bad). Lets remove ($s_5$ and $s_4$), then we have $(s_1, s_2, s_3)$ left (white hat majority). If we removed ($s_3$ and $s_1$), we also have the white majority $(s_2, s_4, s_5)$. 
+      - Test $s_5$ (white hat) vs $s_6$ (white hat):
+        - $s_5$ says $s_6$ is a white hat
+        - $s_6$ says $s_5$ is a white hat
+        - Both say the other is a white hat 
 
-    - This means that after each round, the number of candidates is reduced by a constant fraction (specifically, half remain), which is why the process is efficient and completes in $O(\log_2 n)$ rounds.
+    - Here we can safely keep the ($s_5$, $s_6$) pair because from the ($s_1$, $s_2$) and ($s_3, s_4$) pairs we can easily determine that each one has a black hat. Lets keep $s_3$ and remove rest of them with $s_5$ and $s_6$.
+
+    - In the similar way, we can also have the majority white hats for the next round. 
+
+    - This means that after each round, the number of candidates is reduced by a constant fraction (specifically, half remain with majority white), which is why the process is efficient and completes in $O(\log_2 n)$ rounds.
 
 
 
